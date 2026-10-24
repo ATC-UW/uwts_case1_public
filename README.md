@@ -4,7 +4,7 @@ Predict the next five-second mid-price return for nine anonymized instruments fr
 
 ## Get started
 
-Use Python **3.12 or 3.13** on an ordinary laptop. Unzip the starter pack and open its folder in your terminal or editor. The starter ZIP distributed by the organizer is the easiest path: it includes `data/` and is ready to run. A Git clone contains code only; obtain the same data separately from the organizer and place it in `data/`. Large dataset files and release ZIPs are distributed through Drive or release assets, not Git history.
+Use Python **3.12 or 3.13** on an ordinary laptop. Fork or clone this repository, or choose **Code → Download ZIP** and unzip it. Open the resulting folder in your terminal or editor. The repository includes the complete participant dataset in `data/`; no separate data download is needed. If the organizer gives you a starter ZIP instead, unzip it and follow the same steps below.
 
 ```sh
 python -m venv .venv
@@ -85,4 +85,4 @@ From the repository checkout, the organizer's release script includes only allow
 python organizer/build_release.py --data-dir /path/to/public/export --output-dir /path/to/releases --version v1
 ```
 
-It refuses to overwrite an existing ZIP and writes `release.json` with hashes of its contents. Generated data and ZIPs remain untracked. The separate private organizer repository handles data generation and judging.
+It refuses to overwrite an existing ZIP and writes `release.json` with hashes of its contents. The five frozen participant files in `data/` are tracked in Git. Additional generated data, submissions, and release ZIPs remain untracked. The separate private organizer repository handles data generation and judging.

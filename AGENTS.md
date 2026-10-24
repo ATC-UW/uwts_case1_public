@@ -9,6 +9,6 @@ This is the participant-facing repository. Keep the workflow small enough for a 
 - `case1.packaging` explicitly includes predictions, source, metadata, and optional requirements. Never zip a whole project.
 - In the full repository checkout, `organizer/build_release.py` has a strict public-file allowlist. Never add generator code, seeds, latent states, answer keys, or private qualification reports here.
 - For repository maintainers only: run `python -m pytest` after consequential toolkit changes. Favor tests for data leakage boundaries, malformed inputs, ID alignment, scoring, and release contents. The participant starter ZIP omits `tests/`, `pyproject.toml`, and `organizer/`; agents working from that ZIP should run the participant solution to validate their changes, not attempt missing development commands.
-- Keep generated `data/`, `submissions/`, and release archives out of Git. Do not contact external services or publish changes without the organizer's instruction.
+- Keep the five frozen participant files in `data/` tracked and unchanged. Additional generated data, `submissions/`, and release archives stay out of Git. Do not contact external services or publish changes without the organizer's instruction.
 
 To explore a modeling idea, edit the participant solution; do not change the metric or contract to improve a score. Use ordinary functions and explicit arguments. Avoid unnecessary abstractions and configuration layers.

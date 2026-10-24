@@ -4,7 +4,13 @@ __pycache__/
 *.egg-info/
 *.pyc
 .DS_Store
-data/
+# Only the frozen participant dataset belongs in Git.
+/data/*
+!/data/manifest.json
+!/data/train.csv
+!/data/validation.csv
+!/data/test.csv
+!/data/sample_submission.csv
 submissions/
 dist/
 build/

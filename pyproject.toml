@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uwts-case1"
+version = "0.1.0"
+description = "Public data contract, scoring, and starter workflow for UWTS Case 1"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "numpy==2.5.4",
+    "pandas==2.3.3",
+    "scikit-learn==1.9.1",
+    "scipy==1.18.1",
+    "joblib==1.6.0",
+    "threadpoolctl==3.7.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==9.1.1"]
+
+[tool.setuptools.packages.find]
+include = ["case1*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -92,12 +92,17 @@ def validate_ids(values, *, name: str = "row IDs") -> list[str]:
 def numeric_columns(frame: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
     try:
         converted = frame.loc[:, columns].apply(pd.to_numeric, errors="raise")
+        if any(np.iscomplexobj(converted[column].to_numpy()) for column in columns):
+            raise ValidationError("Data columns must contain real numeric values, not complex numbers.")
         values = converted.to_numpy(dtype=np.float64)
+    except ValidationError:
+        raise
     except (ValueError, TypeError, OverflowError) as exc:
         raise ValidationError("Data columns must contain numeric values.") from exc
     if not np.isfinite(values).all():
         raise ValidationError("Data columns must contain only finite values; no blanks, NaN, or infinity.")
-    return converted
+    # Normalize all accepted values, including booleans, to the actual CSV wire type.
+    return pd.DataFrame(values, index=frame.index, columns=columns)
 
 
 def sha256_file(path: str | Path) -> str:

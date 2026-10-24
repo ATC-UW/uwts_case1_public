@@ -118,3 +118,34 @@ def test_packager_rejects_empty_source(tmp_path, source_text):
         create_submission(frame, ["1"], team_name="Team", dataset_id="test",
                           solution_path=source, output_dir=tmp_path / "out")
     assert not (tmp_path / "out").exists()
+
+
+@pytest.mark.parametrize("kind", ["complex", "team_surrogate", "dataset_surrogate"])
+def test_packager_rejects_values_that_cannot_reach_the_judge(tmp_path, kind):
+    source = tmp_path / "solution.py"
+    source.write_text("pass\n")
+    frame = pd.DataFrame(0.0, index=[0], columns=TARGET_COLUMNS)
+    frame.insert(0, "row_id", ["1"])
+    team, dataset = "Team", "test"
+    if kind == "complex":
+        frame["target_0"] = [1.0 + 2.0j]
+    elif kind == "team_surrogate":
+        team = "Bad" + chr(0xD800)
+    else:
+        dataset = "Bad" + chr(0xD800)
+    with pytest.raises(ValidationError, match="real|Unicode"):
+        create_submission(frame, ["1"], team_name=team, dataset_id=dataset,
+                          solution_path=source, output_dir=tmp_path / "out")
+    assert not (tmp_path / "out").exists()
+
+
+def test_boolean_predictions_are_serialized_as_numeric_values(tmp_path):
+    source = tmp_path / "solution.py"
+    source.write_text("pass\n")
+    frame = pd.DataFrame(True, index=[0], columns=TARGET_COLUMNS)
+    frame.insert(0, "row_id", ["1"])
+    path, _ = create_submission(frame, ["1"], team_name="Team", dataset_id="test",
+                                solution_path=source, output_dir=tmp_path / "out")
+    with zipfile.ZipFile(path) as archive:
+        actual = read_predictions(io.BytesIO(archive.read("predictions.csv")), ["1"])
+    assert (actual[TARGET_COLUMNS].to_numpy() == 1.0).all()

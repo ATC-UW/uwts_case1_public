@@ -12,7 +12,7 @@ def _arrays(y_true, y_pred) -> tuple[np.ndarray, np.ndarray]:
     try:
         actual = np.asarray(y_true, dtype=np.float64)
         predicted = np.asarray(y_pred, dtype=np.float64)
-    except (ValueError, TypeError) as exc:
+    except (ValueError, TypeError, OverflowError) as exc:
         raise ValidationError("Scores require numeric arrays.") from exc
     if actual.shape != predicted.shape or actual.size == 0 or actual.ndim not in (1, 2):
         raise ValidationError("Actual and predicted arrays must have the same nonempty 1D or 2D shape.")

@@ -113,3 +113,8 @@ def test_binary_csv_decode_errors_are_actionable():
 def test_complex_predictions_are_not_silently_discarded():
     with pytest.raises(ValidationError, match="real"):
         score([1.0], [1.0 + 2.0j])
+
+
+def test_numeric_overflow_is_a_validation_error():
+    with pytest.raises(ValidationError):
+        score([1.0], [10 ** 1000])

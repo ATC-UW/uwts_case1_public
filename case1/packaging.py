@@ -44,6 +44,11 @@ def create_submission(
         raise ValidationError("Team name cannot contain control characters.")
     if not isinstance(dataset_id, str) or not dataset_id.strip():
         raise ValidationError("A dataset_id from data/manifest.json is required.")
+    for label, value in (("Team name", team_name), ("Dataset ID", dataset_id)):
+        try:
+            value.encode("utf-8")
+        except UnicodeError as exc:
+            raise ValidationError(f"{label} must contain valid Unicode text.") from exc
     aligned = validate_predictions(predictions, expected_ids)
     submission_id = uuid4().hex
     metadata = {
